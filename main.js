@@ -93,5 +93,6 @@ if (search) {
 }
 
 // ===== INITIAL LOAD =====
-document.addEventListener("DOMContentLoaded", renderTable);
+//document.addEventListener("DOMContentLoaded", renderTable);
+
 
