@@ -1,3 +1,5 @@
+console.log("MAIN.JS LOADED");
+
 // ===== LOAD STUDENTS =====
 let students = JSON.parse(localStorage.getItem("students"));
 
@@ -92,3 +94,4 @@ if (search) {
 
 // ===== INITIAL LOAD =====
 document.addEventListener("DOMContentLoaded", renderTable);
+
