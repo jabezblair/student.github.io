@@ -1,95 +1,5 @@
-let students = JSON.parse(localStorage.getItem("students")) || [];
-const body = document.getElementById("tableBody");
-
-function save() {
-  localStorage.setItem("students", JSON.stringify(students));
-}
-
-if (document.getElementById("studentForm")) {
-  studentForm.onsubmit = e => {
-    e.preventDefault();
-    const reader = new FileReader();
-    reader.onload = () => {
-      students.push({
-        usn: usn.value, name: name.value, class: class.value,
-        branch: branch.value, cgpa: cgpa.value,
-        email: email.value, phone: phone.value,
-        photo: reader.result || "assets/student.png"
-      });
-      save();
-      alert("Student Added!");
-      studentForm.reset();
-    };
-    reader.readAsDataURL(photo.files[0] || new Blob());
-  };
-}
-
-function render(list = students) {
-  if (!body) return;
-  body.innerHTML = "";
-  list.forEach((s,i)=>{
-    body.innerHTML += `
-      <tr>
-        <td><img src="${s.photo}"></td>
-        <td>${s.usn}</td><td>${s.name}</td><td>${s.class}</td>
-        <td>${s.branch}</td><td>${s.cgpa}</td>
-        <td>${s.email}</td><td>${s.phone}</td>
-        <td>
-          <button onclick="del(${i})">Delete</button>
-        </td>
-      </tr>`;
-  });
-}
-
-function del(i){
-  if(confirm("Delete record?")){
-    students.splice(i,1);
-    save(); render();
-  }
-}
-
-if(document.getElementById("search")){
-  search.oninput = ()=>{
-    const q = search.value.toLowerCase();
-    render(students.filter(s =>
-      s.name.toLowerCase().includes(q) ||
-      s.usn.toLowerCase().includes(q) ||
-      s.branch.toLowerCase().includes(q)
-    ));
-  }
-}
-const form = document.getElementById("studentForm");
-
-form.addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    // Capture basic info
-    const student = {
-        usn: document.getElementById("usn").value,
-        name: document.getElementById("name").value,
-        class: document.getElementById("class").value,
-        branch: document.getElementById("branch").value,
-        cgpa: document.getElementById("cgpa").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        photo: document.getElementById("photo").files[0] ? document.getElementById("photo").files[0].name : "",
-        // Capture marks
-        marks: {
-            subject1: Number(document.getElementById("marks1").value),
-            subject2: Number(document.getElementById("marks2").value),
-            subject3: Number(document.getElementById("marks3").value)
-        }
-    };
-
-    console.log(student); // Replace this with saving to storage or sending to backend
-
-    // Optional: Clear form after adding
-    form.reset();
-    alert("Student record added successfully!");
-});
-
-render();
-const students = [
+// Load students from localStorage or initialize with sample data
+let students = JSON.parse(localStorage.getItem("students")) || [
     {
         photo: "https://i.pravatar.cc/50?img=1",
         usn: "1CR24CS120",
@@ -111,92 +21,112 @@ const students = [
         email: "bob.smith@example.com",
         phone: "9123456780",
         marks: { subject1: 65, subject2: 70, subject3: 80 }
-    },
-    {
-        photo: "https://i.pravatar.cc/50?img=3",
-        usn: "1CR24CS130",
-        name: "Charlie Davis",
-        class: "CS-4A",
-        branch: "Computer Science",
-        cgpa: 9.1,
-        email: "charlie.davis@example.com",
-        phone: "9988776655",
-        marks: { subject1: 90, subject2: 88, subject3: 94 }
-    },
-    {
-        photo: "https://i.pravatar.cc/50?img=4",
-        usn: "1CR24CS135",
-        name: "Diana Evans",
-        class: "CS-4A",
-        branch: "Computer Science",
-        cgpa: 8.0,
-        email: "diana.evans@example.com",
-        phone: "9871122334",
-        marks: { subject1: 75, subject2: 82, subject3: 78 }
-    },
-    {
-        photo: "https://i.pravatar.cc/50?img=5",
-        usn: "1CR24CS140",
-        name: "Edward Harris",
-        class: "CS-4A",
-        branch: "Computer Science",
-        cgpa: 8.7,
-        email: "edward.harris@example.com",
-        phone: "9112233445",
-        marks: { subject1: 88, subject2: 90, subject3: 85 }
     }
 ];
 
-// Render Table
-function renderTable(data) {
-    const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = "";
+// Save to localStorage
+function save() {
+    localStorage.setItem("students", JSON.stringify(students));
+}
 
-    data.forEach((student, index) => {
-        const total = student.marks.subject1 + student.marks.subject2 + student.marks.subject3;
-        const average = (total / 3).toFixed(2);
+// Form submit
+const form = document.getElementById("studentForm");
+if(form){
+    form.addEventListener("submit", function(e){
+        e.preventDefault();
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td><img src="${student.photo}" alt="photo" width="50"></td>
-            <td>${student.usn}</td>
-            <td>${student.name}</td>
-            <td>${student.class}</td>
-            <td>${student.branch}</td>
-            <td>${student.cgpa}</td>
-            <td>${student.email}</td>
-            <td>${student.phone}</td>
-            <td>${student.marks.subject1}, ${student.marks.subject2}, ${student.marks.subject3}</td>
-            <td>${total}</td>
-            <td>${average}</td>
-            <td>
-                <button onclick="editStudent(${index})">Edit</button>
-                <button onclick="deleteStudent(${index})">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
+        const reader = new FileReader();
+        const file = document.getElementById("photo").files[0] || null;
+
+        reader.onload = function(){
+            const student = {
+                usn: document.getElementById("usn").value,
+                name: document.getElementById("name").value,
+                class: document.getElementById("class").value,
+                branch: document.getElementById("branch").value,
+                cgpa: parseFloat(document.getElementById("cgpa").value),
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                photo: reader.result || "https://i.pravatar.cc/50?img=10",
+                marks: {
+                    subject1: Number(document.getElementById("marks1").value),
+                    subject2: Number(document.getElementById("marks2").value),
+                    subject3: Number(document.getElementById("marks3").value)
+                }
+            };
+
+            students.push(student);
+            save();
+            alert("Student Added Successfully!");
+            form.reset();
+        }
+
+        if(file){
+            reader.readAsDataURL(file);
+        } else {
+            reader.onload(); // Call immediately if no file
+        }
     });
 }
 
-// Initial Render
-renderTable(students);
+// Render Table
+function renderTable(list = students){
+    const tbody = document.getElementById("tableBody");
+    if(!tbody) return;
 
-// Search
-document.getElementById("search").addEventListener("input", function () {
-    const query = this.value.toLowerCase();
-    const filtered = students.filter(s =>
-        s.usn.toLowerCase().includes(query) ||
-        s.name.toLowerCase().includes(query) ||
-        s.branch.toLowerCase().includes(query)
-    );
-    renderTable(filtered);
-});
+    tbody.innerHTML = "";
+    list.forEach((s,i)=>{
+        const total = s.marks.subject1 + s.marks.subject2 + s.marks.subject3;
+        const avg = (total/3).toFixed(2);
 
-// Dummy edit/delete
-function editStudent(index) { alert("Edit " + students[index].name); }
-function deleteStudent(index) { 
-    if(confirm("Delete " + students[index].name + "?")){
-        students.splice(index,1);
-        renderTable(students);
+        tbody.innerHTML += `
+            <tr>
+                <td><img src="${s.photo}" width="50"></td>
+                <td>${s.usn}</td>
+                <td>${s.name}</td>
+                <td>${s.class}</td>
+                <td>${s.branch}</td>
+                <td>${s.cgpa}</td>
+                <td>${s.email}</td>
+                <td>${s.phone}</td>
+                <td>${s.marks.subject1}, ${s.marks.subject2}, ${s.marks.subject3}</td>
+                <td>${total}</td>
+                <td>${avg}</td>
+                <td>
+                    <button onclick="editStudent(${i})">Edit</button>
+                    <button onclick="deleteStudent(${i})">Delete</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// Delete function
+function deleteStudent(i){
+    if(confirm("Delete this student?")){
+        students.splice(i,1);
+        save();
+        renderTable();
     }
 }
+
+// Dummy Edit function
+function editStudent(i){
+    alert("Edit function for " + students[i].name);
+}
+
+// Search
+const search = document.getElementById("search");
+if(search){
+    search.addEventListener("input", ()=>{
+        const q = search.value.toLowerCase();
+        renderTable(students.filter(s =>
+            s.usn.toLowerCase().includes(q) ||
+            s.name.toLowerCase().includes(q) ||
+            s.branch.toLowerCase().includes(q)
+        ));
+    });
+}
+
+// Initial render
+renderTable();
