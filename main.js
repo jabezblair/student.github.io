@@ -58,5 +58,35 @@ if(document.getElementById("search")){
     ));
   }
 }
+const form = document.getElementById("studentForm");
+
+form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    // Capture basic info
+    const student = {
+        usn: document.getElementById("usn").value,
+        name: document.getElementById("name").value,
+        class: document.getElementById("class").value,
+        branch: document.getElementById("branch").value,
+        cgpa: document.getElementById("cgpa").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        photo: document.getElementById("photo").files[0] ? document.getElementById("photo").files[0].name : "",
+        // Capture marks
+        marks: {
+            subject1: Number(document.getElementById("marks1").value),
+            subject2: Number(document.getElementById("marks2").value),
+            subject3: Number(document.getElementById("marks3").value)
+        }
+    };
+
+    console.log(student); // Replace this with saving to storage or sending to backend
+
+    // Optional: Clear form after adding
+    form.reset();
+    alert("Student record added successfully!");
+});
 
 render();
+
