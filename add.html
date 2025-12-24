@@ -17,7 +17,7 @@
 <div class="container">
   <h2>Add Student Record</h2>
 
-  <form id="studentForm">
+<form id="studentForm">
     <input required placeholder="USN" id="usn">
     <input required placeholder="Name" id="name">
     <input required placeholder="Class" id="class">
@@ -27,12 +27,18 @@
     <input required placeholder="Phone Number" id="phone">
     <input type="file" id="photo">
 
-    <button>Add Student</button>
+    <!-- New Fields for Marks -->
+    <input required placeholder="Marks - Subject 1" id="marks1" type="number" min="0" max="100">
+    <input required placeholder="Marks - Subject 2" id="marks2" type="number" min="0" max="100">
+    <input required placeholder="Marks - Subject 3" id="marks3" type="number" min="0" max="100">
+
+    <button type="submit">Add Student</button>
   </form>
 </div>
 
 <script src="main.js"></script>
 </body>
 </html>
+
 
 
