@@ -21,6 +21,27 @@ let students = JSON.parse(localStorage.getItem("students")) || [
         email: "bob.smith@example.com",
         phone: "9123456780",
         marks: { subject1: 65, subject2: 70, subject3: 80 }
+    },
+      photo: "https://i.pravatar.cc/50?img=1",
+        usn: "1CR24CS120",
+        name: "Alice Johnson",
+        class: "CS-4A",
+        branch: "Computer Science",
+        cgpa: 8.5,
+        email: "alice.johnson@example.com",
+        phone: "9876543210",
+        marks: { subject1: 78, subject2: 85, subject3: 92 }
+    },
+    {
+        photo: "https://i.pravatar.cc/50?img=2",
+        usn: "1CR24CS125",
+        name: "Bob Smith",
+        class: "CS-4A",
+        branch: "Computer Science",
+        cgpa: 7.9,
+        email: "bob.smith@example.com",
+        phone: "9123456780",
+        marks: { subject1: 65, subject2: 70, subject3: 80 }
     }
 ];
 
@@ -130,3 +151,4 @@ if(search){
 
 // Initial render
 renderTable();
+
