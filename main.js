@@ -89,7 +89,6 @@ form.addEventListener("submit", function(e) {
 });
 
 render();
-// Sample Student Data
 const students = [
     {
         photo: "https://i.pravatar.cc/50?img=1",
@@ -148,14 +147,16 @@ const students = [
     }
 ];
 
-// Function to render table
+// Render Table
 function renderTable(data) {
     const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = ""; // Clear previous rows
+    tbody.innerHTML = "";
 
     data.forEach((student, index) => {
-        const tr = document.createElement("tr");
+        const total = student.marks.subject1 + student.marks.subject2 + student.marks.subject3;
+        const average = (total / 3).toFixed(2);
 
+        const tr = document.createElement("tr");
         tr.innerHTML = `
             <td><img src="${student.photo}" alt="photo" width="50"></td>
             <td>${student.usn}</td>
@@ -165,6 +166,9 @@ function renderTable(data) {
             <td>${student.cgpa}</td>
             <td>${student.email}</td>
             <td>${student.phone}</td>
+            <td>${student.marks.subject1}, ${student.marks.subject2}, ${student.marks.subject3}</td>
+            <td>${total}</td>
+            <td>${average}</td>
             <td>
                 <button onclick="editStudent(${index})">Edit</button>
                 <button onclick="deleteStudent(${index})">Delete</button>
@@ -177,7 +181,7 @@ function renderTable(data) {
 // Initial Render
 renderTable(students);
 
-// Search Functionality
+// Search
 document.getElementById("search").addEventListener("input", function () {
     const query = this.value.toLowerCase();
     const filtered = students.filter(s =>
@@ -188,16 +192,11 @@ document.getElementById("search").addEventListener("input", function () {
     renderTable(filtered);
 });
 
-// Dummy functions for Edit/Delete
-function editStudent(index) {
-    alert("Edit function for " + students[index].name);
-}
-
-function deleteStudent(index) {
-    if(confirm("Are you sure you want to delete " + students[index].name + "?")) {
+// Dummy edit/delete
+function editStudent(index) { alert("Edit " + students[index].name); }
+function deleteStudent(index) { 
+    if(confirm("Delete " + students[index].name + "?")){
         students.splice(index,1);
         renderTable(students);
     }
 }
-
-
